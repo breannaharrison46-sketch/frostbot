@@ -22,30 +22,18 @@ box-shadow:0 0 10px #00ff99;
 
 #output{
 white-space:pre-wrap;
-margin-bottom:10px;
+margin-bottom:15px;
 }
 
 input{
 background:black;
 color:#00ff99;
-border:none;
+border:1px solid #00ff99;
+padding:10px;
 outline:none;
 font-family:monospace;
 font-size:16px;
 width:100%;
-}
-
-.cursor{
-display:inline-block;
-width:10px;
-background:#00ff99;
-animation:blink 1s infinite;
-}
-
-@keyframes blink{
-0%{opacity:1;}
-50%{opacity:0;}
-100%{opacity:1;}
 }
 
 </style>
@@ -65,7 +53,7 @@ Type "help" for commands.
 
 </div>
 
-<input type="text" id="command" autofocus>
+<input id="command" placeholder="type command here..." autofocus>
 
 </div>
 
@@ -83,7 +71,7 @@ let cmd = input.value.trim().toLowerCase();
 output.innerHTML += "\n> " + cmd;
 
 if(cmd === "help"){
-output.innerHTML += "\nCommands:\nhelp\nscan\nstatus\nclear\nlogin\n";
+output.innerHTML += "\nCommands: help, scan, status, clear, login\n";
 }
 
 else if(cmd === "scan"){
@@ -91,25 +79,25 @@ output.innerHTML += "\nScanning system...\n████████████�
 }
 
 else if(cmd === "status"){
-output.innerHTML += "\nSystem Status: ONLINE\nFrostBot AI Core: ACTIVE\nNetwork: SECURE\n";
+output.innerHTML += "\nSystem Status: ONLINE\nFrostBot Core: ACTIVE\n";
 }
 
 else if(cmd === "login"){
-output.innerHTML += "\nRedirecting to login...\n";
+output.innerHTML += "\nReturning to login...\n";
 setTimeout(function(){
-window.location.href = "index.html";
-},1500);
+window.location.href="index.html";
+},1000);
 }
 
 else if(cmd === "clear"){
-output.innerHTML = "";
+output.innerHTML="";
 }
 
 else{
 output.innerHTML += "\nUnknown command\n";
 }
 
-input.value = "";
+input.value="";
 
 }
 

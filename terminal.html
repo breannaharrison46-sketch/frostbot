@@ -17,6 +17,21 @@ padding:20px;
 border-radius:10px;
 min-height:80vh;
 }
+
+#output{
+white-space:pre-wrap;
+margin-bottom:10px;
+}
+
+input{
+background:black;
+color:#00ff99;
+border:none;
+outline:none;
+font-family:monospace;
+font-size:16px;
+width:100%;
+}
 </style>
 
 </head>
@@ -25,12 +40,59 @@ min-height:80vh;
 
 <div class="terminal">
 
-<h1>FROST BOT TERMINAL</h1>
+<div id="output">
+FROST BOT TERMINAL
+Access Granted.
+System Ready...
 
-<p>Access Granted.</p>
-<p>System Ready...</p>
+Type "help" for commands.
 
 </div>
+
+<input type="text" id="command" autofocus>
+
+</div>
+
+<script>
+
+const input = document.getElementById("command");
+const output = document.getElementById("output");
+
+input.addEventListener("keydown", function(e){
+
+if(e.key === "Enter"){
+
+let cmd = input.value.trim().toLowerCase();
+
+output.innerHTML += "\n> " + cmd;
+
+if(cmd === "help"){
+output.innerHTML += "\nCommands: help, scan, status, clear\n";
+}
+
+else if(cmd === "scan"){
+output.innerHTML += "\nScanning system...\nNo threats detected.\n";
+}
+
+else if(cmd === "status"){
+output.innerHTML += "\nSystem status: ONLINE\n";
+}
+
+else if(cmd === "clear"){
+output.innerHTML = "";
+}
+
+else{
+output.innerHTML += "\nUnknown command\n";
+}
+
+input.value = "";
+
+}
+
+});
+
+</script>
 
 </body>
 </html>

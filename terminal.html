@@ -40,6 +40,20 @@ width:100%;
 margin-top:auto;
 }
 
+.cursor{
+display:inline-block;
+width:10px;
+background:#00ff99;
+margin-left:4px;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%{opacity:1;}
+50%{opacity:0;}
+100%{opacity:1;}
+}
+
 </style>
 
 </head>
@@ -54,7 +68,6 @@ Access Granted.
 System Ready...
 
 Type "help" for commands.
-
 </div>
 
 <input id="command" placeholder="type command here..." autofocus>
@@ -102,7 +115,8 @@ output.innerHTML +=
 
 else if(cmd === "ai"){
 output.innerHTML +=
-"FrostBot AI: Hello. How can I assist you today?\n";
+"FrostBot AI: Hello. How can I assist you today?\n"+
+"Example: try typing 'scan' or 'status'\n";
 }
 
 else if(cmd === "sysinfo"){

@@ -3,388 +3,717 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FrostBot AI Dashboard</title>
+  <title>FrostBot AI Trading Dashboard</title>
   <style>
-    * {
-      box-sizing: border-box;
+    *{
+      box-sizing:border-box;
     }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #07142b, #08101f);
-      color: white;
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:linear-gradient(180deg,#0a1229 0%, #111833 40%, #22112d 100%);
+      color:white;
     }
 
-    .container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 24px 18px 40px;
+    .wrapper{
+      max-width:1200px;
+      margin:0 auto;
+      padding:20px;
     }
 
-    h1 {
-      font-size: 28px;
-      line-height: 1.15;
-      margin: 10px 0 24px;
-      font-weight: 700;
+    .topbar{
+      background:linear-gradient(90deg,#ff7a18,#ff4d6d,#7b61ff);
+      border-radius:18px;
+      padding:14px 18px;
+      margin-bottom:18px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
     }
 
-    .card {
-      background: rgba(10, 21, 47, 0.95);
-      border-radius: 18px;
-      padding: 22px 18px;
-      margin-bottom: 18px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    .topbar h1{
+      margin:0;
+      font-size:28px;
+      font-weight:800;
     }
 
-    .label {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 14px;
-      display: block;
+    .topbar .badge{
+      background:rgba(255,255,255,0.16);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:700;
     }
 
-    .connect-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 14px;
+    .grid{
+      display:grid;
+      grid-template-columns:1.1fr 1fr;
+      gap:18px;
     }
 
-    input, select {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid #22345f;
-      background: #0a1735;
-      color: white;
-      font-size: 16px;
-      outline: none;
+    .card{
+      background:rgba(16,22,48,0.96);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:20px;
+      padding:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.25);
+      margin-bottom:18px;
     }
 
-    input::placeholder {
-      color: #8ea1cc;
+    .card h2, .card h3{
+      margin:0 0 14px;
     }
 
-    .btn {
-      border: none;
-      border-radius: 14px;
-      padding: 13px 16px;
-      font-size: 16px;
-      font-weight: 700;
-      color: white;
-      cursor: pointer;
-      min-width: 130px;
+    .muted{
+      color:#9db0d9;
+      font-size:14px;
     }
 
-    .btn-green {
-      background: #2bd76c;
+    .connect-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      margin-top:12px;
     }
 
-    .btn-red {
-      background: #ff4b57;
+    input, select{
+      width:100%;
+      padding:13px 14px;
+      border-radius:14px;
+      border:1px solid #31416d;
+      background:#121b3e;
+      color:white;
+      font-size:15px;
+      outline:none;
     }
 
-    .btn-blue {
-      background: #3f74ff;
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:13px 18px;
+      font-size:15px;
+      font-weight:800;
+      color:white;
+      cursor:pointer;
     }
 
-    .status {
-      font-size: 15px;
-      color: #c9d6ff;
+    .btn-green{ background:linear-gradient(90deg,#21d07a,#28e08f); }
+    .btn-red{ background:linear-gradient(90deg,#ff4c61,#ff6d4a); }
+    .btn-blue{ background:linear-gradient(90deg,#31a4ff,#6a7bff); }
+    .btn-orange{ background:linear-gradient(90deg,#ff8a00,#ff5e00); }
+
+    .status{
+      margin-top:12px;
+      font-weight:700;
+      color:#9fe5b8;
     }
 
-    .status-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin-right: 8px;
-      background: #ff4b57;
-      vertical-align: middle;
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
     }
 
-    .status-dot.connected {
-      background: #2bd76c;
+    .stat{
+      background:linear-gradient(180deg,#18234d,#131b3a);
+      border-radius:18px;
+      padding:16px;
     }
 
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 18px;
+    .stat .label{
+      color:#95abd7;
+      font-size:13px;
+      margin-bottom:8px;
     }
 
-    .stat-box {
-      background: rgba(12, 25, 56, 0.95);
-      border-radius: 18px;
-      padding: 18px 16px;
-      min-height: 110px;
+    .stat .value{
+      font-size:26px;
+      font-weight:800;
     }
 
-    .stat-title {
-      color: #c8d4ff;
-      font-size: 15px;
-      margin-bottom: 14px;
-      font-weight: 600;
+    .strategy-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
     }
 
-    .stat-value {
-      font-size: 32px;
-      font-weight: 700;
+    .strategy-item{
+      background:linear-gradient(90deg,rgba(255,119,0,0.12),rgba(255,0,111,0.08));
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:16px;
+      padding:14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
     }
 
-    .controls-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 10px;
-      margin-bottom: 10px;
+    .strategy-name{
+      font-weight:800;
+      margin-bottom:4px;
     }
 
-    .controls-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 18px;
+    .strategy-desc{
+      color:#b3c1e5;
+      font-size:13px;
     }
 
-    .button-row {
-      display: flex;
-      gap: 12px;
+    .toggle{
+      width:52px;
+      height:30px;
+      border-radius:999px;
+      background:#3b4463;
+      position:relative;
+      cursor:pointer;
+      flex-shrink:0;
     }
 
-    .button-row .btn {
-      flex: 1;
+    .toggle.on{
+      background:linear-gradient(90deg,#39d98a,#3de0d3);
     }
 
-    .log-box {
-      min-height: 180px;
-      background: #07122b;
-      border: 1px solid #22345f;
-      border-radius: 16px;
-      padding: 14px;
-      font-family: monospace;
-      font-size: 14px;
-      color: #7fffb0;
-      white-space: pre-wrap;
-      overflow: auto;
+    .toggle::after{
+      content:"";
+      position:absolute;
+      top:4px;
+      left:4px;
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      background:white;
+      transition:0.25s;
     }
 
-    .small {
-      font-size: 13px;
-      color: #90a2cb;
-      margin-top: 8px;
+    .toggle.on::after{
+      left:26px;
     }
 
-    @media (max-width: 420px) {
-      .connect-row,
-      .controls-grid,
-      .controls-grid-2,
-      .button-row {
-        grid-template-columns: 1fr !important;
-        flex-direction: column;
+    .analysis-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .mini-label{
+      font-size:12px;
+      color:#9db0d9;
+      margin-bottom:6px;
+    }
+
+    .bar-box{
+      margin:16px 0;
+    }
+
+    .bar{
+      width:100%;
+      height:16px;
+      border-radius:999px;
+      background:#202a4e;
+      overflow:hidden;
+      margin-top:8px;
+    }
+
+    .bar-fill{
+      height:100%;
+      width:58%;
+      background:linear-gradient(90deg,#00d084,#35f2d0);
+    }
+
+    .price-chart{
+      height:180px;
+      border-radius:16px;
+      background:linear-gradient(180deg,#111a3a,#0d1430);
+      border:1px solid rgba(255,255,255,0.06);
+      position:relative;
+      overflow:hidden;
+      margin:14px 0;
+    }
+
+    .chart-line{
+      position:absolute;
+      inset:0;
+    }
+
+    .decision-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin:12px 0;
+    }
+
+    .decision{
+      border-radius:18px;
+      padding:16px;
+      font-weight:800;
+    }
+
+    .higher{
+      background:linear-gradient(180deg,#153f48,#1f7b72);
+    }
+
+    .lower{
+      background:linear-gradient(180deg,#4c2048,#8d356e);
+    }
+
+    .prediction{
+      border-radius:18px;
+      padding:18px;
+      background:linear-gradient(90deg,#163d4f,#224f79);
+      margin:14px 0;
+    }
+
+    .prediction strong{
+      display:block;
+      font-size:22px;
+      margin-top:6px;
+    }
+
+    .trade-buttons{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:12px;
+    }
+
+    .auto-trading{
+      margin-top:16px;
+      border-top:1px solid rgba(255,255,255,0.08);
+      padding-top:16px;
+    }
+
+    .pill-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .pill{
+      padding:8px 12px;
+      border-radius:999px;
+      background:#1a2448;
+      border:1px solid #2d3c69;
+      font-size:13px;
+      color:#bfd0ff;
+    }
+
+    .pill.active{
+      background:linear-gradient(90deg,#31a4ff,#6a7bff);
+      color:white;
+      border:none;
+    }
+
+    .history-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .history-stats{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .history-card{
+      background:linear-gradient(180deg,#18234d,#121938);
+      border-radius:16px;
+      padding:14px;
+    }
+
+    .trade-log{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .trade-item{
+      background:linear-gradient(180deg,#121a38,#0f1530);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:18px;
+      padding:14px;
+      display:grid;
+      grid-template-columns:1.1fr 0.9fr;
+      gap:10px;
+    }
+
+    .trade-title{
+      font-weight:800;
+      margin-bottom:6px;
+    }
+
+    .tag{
+      display:inline-block;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      margin-right:6px;
+      margin-bottom:6px;
+    }
+
+    .tag-blue{ background:#233d8e; }
+    .tag-green{ background:#1f6d52; }
+    .tag-yellow{ background:#8a6a14; }
+    .tag-red{ background:#7f3148; }
+
+    .profit-pos{
+      color:#4ef29a;
+      font-weight:800;
+      font-size:24px;
+      text-align:right;
+    }
+
+    .small-right{
+      text-align:right;
+      color:#9db0d9;
+      font-size:13px;
+    }
+
+    @media (max-width: 900px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 600px){
+      .stats,
+      .history-stats,
+      .decision-grid,
+      .trade-buttons,
+      .analysis-grid{
+        grid-template-columns:1fr;
       }
 
-      .btn {
-        width: 100%;
-        min-width: 0;
+      .connect-row{
+        grid-template-columns:1fr;
+      }
+
+      .trade-item{
+        grid-template-columns:1fr;
+      }
+
+      .topbar h1{
+        font-size:22px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>FrostBot AI Predictive Dashboard</h1>
+  <div class="wrapper">
+
+    <div class="topbar">
+      <h1>FrostBot AI Trading Dashboard</h1>
+      <div class="badge">Live UI Preview</div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h2>Deriv API Connection</h2>
+          <div class="muted">Connect your account and manage your trading activities.</div>
+
+          <div class="connect-row">
+            <input type="text" id="token" placeholder="Paste your Deriv API token">
+            <button class="btn btn-green" id="connectBtn">Connect</button>
+          </div>
+
+          <div class="status" id="statusText">● Connected</div>
+
+          <div class="stats" style="margin-top:16px;">
+            <div class="stat">
+              <div class="label">Account Balance</div>
+              <div class="value" id="balance">$328.42</div>
+            </div>
+            <div class="stat">
+              <div class="label">Net Profit/Loss</div>
+              <div class="value" id="profit">+$32.52</div>
+            </div>
+            <div class="stat">
+              <div class="label">Win Rate</div>
+              <div class="value" id="winRate">55%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Trading Strategies</h2>
+          <div class="strategy-list">
+            <div class="strategy-item">
+              <div>
+                <div class="strategy-name">Hybrid</div>
+                <div class="strategy-desc">Predict if price will go higher or lower</div>
+              </div>
+              <div class="toggle on"></div>
+            </div>
+
+            <div class="strategy-item">
+              <div>
+                <div class="strategy-name">Even/Odd</div>
+                <div class="strategy-desc">Digit analysis strategy</div>
+              </div>
+              <div class="toggle"></div>
+            </div>
+
+            <div class="strategy-item">
+              <div>
+                <div class="strategy-name">Matches/Differs</div>
+                <div class="strategy-desc">Pattern-based tick strategy</div>
+              </div>
+              <div class="toggle"></div>
+            </div>
+
+            <div class="strategy-item">
+              <div>
+                <div class="strategy-name">Over/Under</div>
+                <div class="strategy-desc">Number barrier strategy</div>
+              </div>
+              <div class="toggle"></div>
+            </div>
+
+            <div class="strategy-item">
+              <div>
+                <div class="strategy-name">Auto R5</div>
+                <div class="strategy-desc">Coming soon</div>
+              </div>
+              <div class="toggle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2>Hybrid Analysis</h2>
+
+          <div class="analysis-grid">
+            <div>
+              <div class="mini-label">Market</div>
+              <select id="market">
+                <option>Volatility 75 Index</option>
+                <option>Volatility 100 Index</option>
+                <option>Jump 25 Index</option>
+                <option>Crash 500 Index</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="mini-label">Duration</div>
+              <select id="duration">
+                <option>15 Seconds</option>
+                <option>30 Seconds</option>
+                <option>1 Minute</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="mini-label">Higher Barrier ($)</div>
+              <input type="number" value="125">
+            </div>
+
+            <div>
+              <div class="mini-label">Lower Barrier ($)</div>
+              <input type="number" value="125">
+            </div>
+          </div>
+
+          <div class="bar-box">
+            <div class="mini-label">Barrier Type</div>
+            <div class="bar">
+              <div class="bar-fill" id="barFill"></div>
+            </div>
+          </div>
+
+          <div class="price-chart">
+            <svg class="chart-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <polyline
+                fill="none"
+                stroke="#4ad8ff"
+                stroke-width="2"
+                points="0,55 10,48 20,52 30,41 40,46 50,62 60,58 70,66 80,60 90,45 100,50"/>
+              <line x1="0" y1="35" x2="100" y2="35" stroke="#38d58a" stroke-dasharray="4 3" />
+              <line x1="0" y1="68" x2="100" y2="68" stroke="#ff5f89" stroke-dasharray="4 3" />
+            </svg>
+          </div>
+
+          <div class="decision-grid">
+            <div class="decision higher">
+              Higher<br>
+              <strong>50.0%</strong>
+            </div>
+            <div class="decision lower">
+              Lower<br>
+              <strong>45.4%</strong>
+            </div>
+          </div>
+
+          <div class="prediction">
+            <div class="muted">Prediction</div>
+            <strong id="predictionText">HIGHER</strong>
+            <div style="margin-top:6px;">Next tick predicted to go higher than current</div>
+          </div>
+
+          <div class="trade-buttons">
+            <button class="btn btn-green" id="higherBtn">Higher</button>
+            <button class="btn btn-red" id="lowerBtn">Lower</button>
+          </div>
+
+          <div class="auto-trading">
+            <h3>Auto Trading</h3>
+            <div class="pill-row">
+              <div class="pill active">H&L ACTIVE</div>
+              <div class="pill">Min: $15</div>
+              <div class="pill active">60%</div>
+              <div class="pill">65%</div>
+              <div class="pill">70%</div>
+              <div class="pill">75%</div>
+            </div>
+
+            <div class="pill-row" style="margin-top:14px;">
+              <div class="pill">Trades running...</div>
+              <div class="pill">15 rounds</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="card">
-      <label class="label">Enter API Token</label>
-      <div class="connect-row">
-        <input type="text" id="token" placeholder="Enter API token">
-        <button class="btn btn-green" id="connectBtn">Save & Connect</button>
+      <div class="history-top">
+        <h2 style="margin:0;">Trade History</h2>
+        <button class="btn btn-red" id="clearHistoryBtn">Clear History</button>
       </div>
-      <div class="status">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">Status: Disconnected</span>
+
+      <div class="history-stats">
+        <div class="history-card">
+          <div class="mini-label">Net Profit/Loss</div>
+          <div class="value" style="font-size:28px;font-weight:800;color:#4ef29a;">+$1322.04</div>
+        </div>
+        <div class="history-card">
+          <div class="mini-label">Win Rate</div>
+          <div class="value" style="font-size:28px;font-weight:800;">50.0%</div>
+        </div>
+        <div class="history-card">
+          <div class="mini-label">AI Trades</div>
+          <div class="value" style="font-size:28px;font-weight:800;">26</div>
+        </div>
       </div>
-      <div class="small">Demo UI only. This does not place real trades yet.</div>
+
+      <div class="trade-log" id="tradeLog">
+        <div class="trade-item">
+          <div>
+            <div class="trade-title">R_75 — Hybrid LOWER</div>
+            <span class="tag tag-yellow">Pending</span>
+            <span class="tag tag-blue">Hybrid</span>
+            <div class="muted">Time: 10:50 PM</div>
+            <div class="muted">Entry: LOWER</div>
+            <div class="muted">Barrier: -2.00</div>
+            <div class="muted">Status: In Progress</div>
+          </div>
+          <div>
+            <div class="profit-pos">+$600.00</div>
+            <div class="small-right">Stake: $600.00</div>
+          </div>
+        </div>
+
+        <div class="trade-item">
+          <div>
+            <div class="trade-title">Trade X Intelligent</div>
+            <span class="tag tag-green">All Logic Green</span>
+            <span class="tag tag-blue">1t</span>
+            <div class="muted">Differs 4 on 1HZ30V</div>
+            <div class="muted">Success rate: 100%</div>
+          </div>
+          <div>
+            <div class="profit-pos">+$33.00</div>
+            <div class="small-right">Stake: $342.00</div>
+          </div>
+        </div>
+
+        <div class="trade-item">
+          <div>
+            <div class="trade-title">Trade X Intelligent</div>
+            <span class="tag tag-green">Won</span>
+            <span class="tag tag-blue">1t</span>
+            <div class="muted">Differs 6 success rate 100%</div>
+            <div class="muted">Strategy: Intelligent Logic</div>
+          </div>
+          <div>
+            <div class="profit-pos">+$29.74</div>
+            <div class="small-right">Stake: $342.00</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="stats">
-      <div class="stat-box">
-        <div class="stat-title">Balance</div>
-        <div class="stat-value" id="balance">$0.00</div>
-      </div>
-
-      <div class="stat-box">
-        <div class="stat-title">Profit</div>
-        <div class="stat-value" id="profit">$0.00</div>
-      </div>
-
-      <div class="stat-box">
-        <div class="stat-title">Trades</div>
-        <div class="stat-value" id="trades">0</div>
-      </div>
-
-      <div class="stat-box">
-        <div class="stat-title">Win Rate</div>
-        <div class="stat-value" id="winRate">0%</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <label class="label">Bot Controls</label>
-
-      <div class="controls-grid">
-        <select id="strategy">
-          <option value="Trend">Trend</option>
-          <option value="Scalp">Scalp</option>
-          <option value="Breakout">Breakout</option>
-          <option value="Reversal">Reversal</option>
-        </select>
-
-        <input type="number" id="duration" placeholder="Duration" value="1">
-      </div>
-
-      <div class="controls-grid-2">
-        <input type="number" id="stake" placeholder="Stake" value="20">
-        <input type="number" id="maxLoss" placeholder="Max Loss" value="100">
-      </div>
-
-      <div class="button-row">
-        <button class="btn btn-green" id="startBtn">Start Bot</button>
-        <button class="btn btn-red" id="stopBtn">Stop Bot</button>
-      </div>
-    </div>
-
-    <div class="card">
-      <label class="label">Bot Activity</label>
-      <div class="log-box" id="logBox">[SYSTEM] FrostBot dashboard loaded.
-[SYSTEM] Waiting for connection...</div>
-    </div>
   </div>
 
   <script>
     const connectBtn = document.getElementById("connectBtn");
-    const startBtn = document.getElementById("startBtn");
-    const stopBtn = document.getElementById("stopBtn");
-
-    const tokenInput = document.getElementById("token");
-    const statusDot = document.getElementById("statusDot");
+    const predictionText = document.getElementById("predictionText");
+    const higherBtn = document.getElementById("higherBtn");
+    const lowerBtn = document.getElementById("lowerBtn");
+    const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+    const tradeLog = document.getElementById("tradeLog");
+    const balance = document.getElementById("balance");
+    const profit = document.getElementById("profit");
+    const winRate = document.getElementById("winRate");
     const statusText = document.getElementById("statusText");
 
-    const balanceEl = document.getElementById("balance");
-    const profitEl = document.getElementById("profit");
-    const tradesEl = document.getElementById("trades");
-    const winRateEl = document.getElementById("winRate");
-    const logBox = document.getElementById("logBox");
-
-    const strategyEl = document.getElementById("strategy");
-    const durationEl = document.getElementById("duration");
-    const stakeEl = document.getElementById("stake");
-    const maxLossEl = document.getElementById("maxLoss");
-
-    let connected = false;
-    let running = false;
-    let tradeTimer = null;
-
-    function addLog(message) {
-      const time = new Date().toLocaleTimeString();
-      logBox.textContent += `\n[${time}] ${message}`;
-      logBox.scrollTop = logBox.scrollHeight;
-    }
-
-    function setConnected(state) {
-      connected = state;
-      statusDot.classList.toggle("connected", state);
-      statusText.textContent = state ? "Status: Connected" : "Status: Disconnected";
-    }
-
-    function fakeTradeCycle() {
-      if (!running) return;
-
-      let trades = parseInt(tradesEl.textContent, 10);
-      let wins = parseInt(winRateEl.dataset.wins || "0", 10);
-      let losses = parseInt(winRateEl.dataset.losses || "0", 10);
-      let profit = parseFloat(profitEl.textContent.replace("$", ""));
-
-      const outcome = Math.random() > 0.4 ? "win" : "loss";
-      const stake = parseFloat(stakeEl.value || "20");
-
-      trades += 1;
-
-      if (outcome === "win") {
-        wins += 1;
-        profit += stake * 0.85;
-        addLog(`[BOT] Trade #${trades}: WIN (+$${(stake * 0.85).toFixed(2)})`);
-      } else {
-        losses += 1;
-        profit -= stake;
-        addLog(`[BOT] Trade #${trades}: LOSS (-$${stake.toFixed(2)})`);
-      }
-
-      const total = wins + losses;
-      const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
-
-      tradesEl.textContent = trades;
-      profitEl.textContent = `$${profit.toFixed(2)}`;
-      winRateEl.textContent = `${winRate}%`;
-      winRateEl.dataset.wins = wins;
-      winRateEl.dataset.losses = losses;
-
-      const balanceBase = 1000;
-      balanceEl.textContent = `$${(balanceBase + profit).toFixed(2)}`;
-
-      const maxLoss = parseFloat(maxLossEl.value || "100");
-      if (profit <= -maxLoss) {
-        addLog("[RISK] Max loss reached. Bot stopped automatically.");
-        stopBot();
-        return;
-      }
-
-      const nextMs = Math.max(1500, Number(durationEl.value || 1) * 2000);
-      tradeTimer = setTimeout(fakeTradeCycle, nextMs);
-    }
-
-    function startBot() {
-      if (!connected) {
-        addLog("[ERROR] Connect token first.");
-        return;
-      }
-
-      if (running) {
-        addLog("[SYSTEM] Bot is already running.");
-        return;
-      }
-
-      running = true;
-      addLog(`[BOT] Started with strategy=${strategyEl.value}, duration=${durationEl.value}, stake=$${stakeEl.value}, maxLoss=$${maxLossEl.value}`);
-      fakeTradeCycle();
-    }
-
-    function stopBot() {
-      running = false;
-      if (tradeTimer) {
-        clearTimeout(tradeTimer);
-        tradeTimer = null;
-      }
-      addLog("[BOT] Stopped.");
-    }
-
     connectBtn.addEventListener("click", () => {
-      const token = tokenInput.value.trim();
-      if (!token) {
-        addLog("[ERROR] Enter an API token.");
-        return;
-      }
-
-      setConnected(true);
-      addLog("[SYSTEM] Token saved.");
-      addLog("[SYSTEM] Connection established.");
-      balanceEl.textContent = "$1000.00";
+      statusText.textContent = "● Connected";
+      balance.textContent = "$9982.48";
+      profit.textContent = "+$120.00";
+      winRate.textContent = "58%";
     });
 
-    startBtn.addEventListener("click", startBot);
-    stopBtn.addEventListener("click", stopBot);
+    higherBtn.addEventListener("click", () => {
+      predictionText.textContent = "HIGHER";
+      prependTrade("R_75 — Hybrid HIGHER", "+$18.00", "$20.00", "Pending");
+    });
+
+    lowerBtn.addEventListener("click", () => {
+      predictionText.textContent = "LOWER";
+      prependTrade("R_75 — Hybrid LOWER", "+$18.00", "$20.00", "Pending");
+    });
+
+    clearHistoryBtn.addEventListener("click", () => {
+      tradeLog.innerHTML = "";
+    });
+
+    document.querySelectorAll(".toggle").forEach(toggle => {
+      toggle.addEventListener("click", () => {
+        toggle.classList.toggle("on");
+      });
+    });
+
+    function prependTrade(title, pnl, stake, state) {
+      const item = document.createElement("div");
+      item.className = "trade-item";
+      item.innerHTML = `
+        <div>
+          <div class="trade-title">${title}</div>
+          <span class="tag tag-yellow">${state}</span>
+          <span class="tag tag-blue">Hybrid</span>
+          <div class="muted">Time: ${new Date().toLocaleTimeString()}</div>
+          <div class="muted">Auto-generated FrostBot entry</div>
+          <div class="muted">Status: In Progress</div>
+        </div>
+        <div>
+          <div class="profit-pos">${pnl}</div>
+          <div class="small-right">Stake: ${stake}</div>
+        </div>
+      `;
+      tradeLog.prepend(item);
+    }
   </script>
 </body>
 </html>

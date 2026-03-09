@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frost Bot Login</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(#c7d5ea, #9fb3d1);
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 320px;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      letter-spacing: 5px;
+      color: #3a6ea5;
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 90%;
+      padding: 12px;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+      margin-top: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      border-radius: 25px;
+      border: none;
+      background: #5a87d8;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.95;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>FROST BOT</h2>
+    <p>Automation Access</p>
+
+    <input type="password" id="key" placeholder="Enter access key">
+    <br>
+    <button onclick="unlock()">Unlock Terminal</button>
+  </div>
+
+  <script>
+    function unlock() {
+      const key = document.getElementById("key").value.trim();
+
+      if (key === "1234") {
+        window.location.href = "terminal.html";
+      } else {
+        alert("Invalid Access Key");
+      }
+    }
+
+    document.getElementById("key").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") unlock();
+    });
+  </script>
+</body>
+</html>

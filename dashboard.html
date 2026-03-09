@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FrostBot AI Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #07142b, #08101f);
+      color: white;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 18px 40px;
+    }
+
+    h1 {
+      font-size: 28px;
+      line-height: 1.15;
+      margin: 10px 0 24px;
+      font-weight: 700;
+    }
+
+    .card {
+      background: rgba(10, 21, 47, 0.95);
+      border-radius: 18px;
+      padding: 22px 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .label {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .connect-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #22345f;
+      background: #0a1735;
+      color: white;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #8ea1cc;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      min-width: 130px;
+    }
+
+    .btn-green {
+      background: #2bd76c;
+    }
+
+    .btn-red {
+      background: #ff4b57;
+    }
+
+    .btn-blue {
+      background: #3f74ff;
+    }
+
+    .status {
+      font-size: 15px;
+      color: #c9d6ff;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+      background: #ff4b57;
+      vertical-align: middle;
+    }
+
+    .status-dot.connected {
+      background: #2bd76c;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat-box {
+      background: rgba(12, 25, 56, 0.95);
+      border-radius: 18px;
+      padding: 18px 16px;
+      min-height: 110px;
+    }
+
+    .stat-title {
+      color: #c8d4ff;
+      font-size: 15px;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .controls-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .button-row .btn {
+      flex: 1;
+    }
+
+    .log-box {
+      min-height: 180px;
+      background: #07122b;
+      border: 1px solid #22345f;
+      border-radius: 16px;
+      padding: 14px;
+      font-family: monospace;
+      font-size: 14px;
+      color: #7fffb0;
+      white-space: pre-wrap;
+      overflow: auto;
+    }
+
+    .small {
+      font-size: 13px;
+      color: #90a2cb;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 420px) {
+      .connect-row,
+      .controls-grid,
+      .controls-grid-2,
+      .button-row {
+        grid-template-columns: 1fr !important;
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>FrostBot AI Predictive Dashboard</h1>
+
+    <div class="card">
+      <label class="label">Enter API Token</label>
+      <div class="connect-row">
+        <input type="text" id="token" placeholder="Enter API token">
+        <button class="btn btn-green" id="connectBtn">Save & Connect</button>
+      </div>
+      <div class="status">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Status: Disconnected</span>
+      </div>
+      <div class="small">Demo UI only. This does not place real trades yet.</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-title">Balance</div>
+        <div class="stat-value" id="balance">$0.00</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-title">Profit</div>
+        <div class="stat-value" id="profit">$0.00</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-title">Trades</div>
+        <div class="stat-value" id="trades">0</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-title">Win Rate</div>
+        <div class="stat-value" id="winRate">0%</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="label">Bot Controls</label>
+
+      <div class="controls-grid">
+        <select id="strategy">
+          <option value="Trend">Trend</option>
+          <option value="Scalp">Scalp</option>
+          <option value="Breakout">Breakout</option>
+          <option value="Reversal">Reversal</option>
+        </select>
+
+        <input type="number" id="duration" placeholder="Duration" value="1">
+      </div>
+
+      <div class="controls-grid-2">
+        <input type="number" id="stake" placeholder="Stake" value="20">
+        <input type="number" id="maxLoss" placeholder="Max Loss" value="100">
+      </div>
+
+      <div class="button-row">
+        <button class="btn btn-green" id="startBtn">Start Bot</button>
+        <button class="btn btn-red" id="stopBtn">Stop Bot</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="label">Bot Activity</label>
+      <div class="log-box" id="logBox">[SYSTEM] FrostBot dashboard loaded.
+[SYSTEM] Waiting for connection...</div>
+    </div>
+  </div>
+
+  <script>
+    const connectBtn = document.getElementById("connectBtn");
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+
+    const tokenInput = document.getElementById("token");
+    const statusDot = document.getElementById("statusDot");
+    const statusText = document.getElementById("statusText");
+
+    const balanceEl = document.getElementById("balance");
+    const profitEl = document.getElementById("profit");
+    const tradesEl = document.getElementById("trades");
+    const winRateEl = document.getElementById("winRate");
+    const logBox = document.getElementById("logBox");
+
+    const strategyEl = document.getElementById("strategy");
+    const durationEl = document.getElementById("duration");
+    const stakeEl = document.getElementById("stake");
+    const maxLossEl = document.getElementById("maxLoss");
+
+    let connected = false;
+    let running = false;
+    let tradeTimer = null;
+
+    function addLog(message) {
+      const time = new Date().toLocaleTimeString();
+      logBox.textContent += `\n[${time}] ${message}`;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function setConnected(state) {
+      connected = state;
+      statusDot.classList.toggle("connected", state);
+      statusText.textContent = state ? "Status: Connected" : "Status: Disconnected";
+    }
+
+    function fakeTradeCycle() {
+      if (!running) return;
+
+      let trades = parseInt(tradesEl.textContent, 10);
+      let wins = parseInt(winRateEl.dataset.wins || "0", 10);
+      let losses = parseInt(winRateEl.dataset.losses || "0", 10);
+      let profit = parseFloat(profitEl.textContent.replace("$", ""));
+
+      const outcome = Math.random() > 0.4 ? "win" : "loss";
+      const stake = parseFloat(stakeEl.value || "20");
+
+      trades += 1;
+
+      if (outcome === "win") {
+        wins += 1;
+        profit += stake * 0.85;
+        addLog(`[BOT] Trade #${trades}: WIN (+$${(stake * 0.85).toFixed(2)})`);
+      } else {
+        losses += 1;
+        profit -= stake;
+        addLog(`[BOT] Trade #${trades}: LOSS (-$${stake.toFixed(2)})`);
+      }
+
+      const total = wins + losses;
+      const winRate = total > 0 ? Math.round((wins / total) * 100) : 0;
+
+      tradesEl.textContent = trades;
+      profitEl.textContent = `$${profit.toFixed(2)}`;
+      winRateEl.textContent = `${winRate}%`;
+      winRateEl.dataset.wins = wins;
+      winRateEl.dataset.losses = losses;
+
+      const balanceBase = 1000;
+      balanceEl.textContent = `$${(balanceBase + profit).toFixed(2)}`;
+
+      const maxLoss = parseFloat(maxLossEl.value || "100");
+      if (profit <= -maxLoss) {
+        addLog("[RISK] Max loss reached. Bot stopped automatically.");
+        stopBot();
+        return;
+      }
+
+      const nextMs = Math.max(1500, Number(durationEl.value || 1) * 2000);
+      tradeTimer = setTimeout(fakeTradeCycle, nextMs);
+    }
+
+    function startBot() {
+      if (!connected) {
+        addLog("[ERROR] Connect token first.");
+        return;
+      }
+
+      if (running) {
+        addLog("[SYSTEM] Bot is already running.");
+        return;
+      }
+
+      running = true;
+      addLog(`[BOT] Started with strategy=${strategyEl.value}, duration=${durationEl.value}, stake=$${stakeEl.value}, maxLoss=$${maxLossEl.value}`);
+      fakeTradeCycle();
+    }
+
+    function stopBot() {
+      running = false;
+      if (tradeTimer) {
+        clearTimeout(tradeTimer);
+        tradeTimer = null;
+      }
+      addLog("[BOT] Stopped.");
+    }
+
+    connectBtn.addEventListener("click", () => {
+      const token = tokenInput.value.trim();
+      if (!token) {
+        addLog("[ERROR] Enter an API token.");
+        return;
+      }
+
+      setConnected(true);
+      addLog("[SYSTEM] Token saved.");
+      addLog("[SYSTEM] Connection established.");
+      balanceEl.textContent = "$1000.00";
+    });
+
+    startBtn.addEventListener("click", startBot);
+    stopBtn.addEventListener("click", stopBot);
+  </script>
+</body>
+</html>

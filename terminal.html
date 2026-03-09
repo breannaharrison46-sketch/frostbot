@@ -48,7 +48,14 @@ margin-top:auto;
 
 <div class="terminal">
 
-<div id="output"></div>
+<div id="output">
+FROST BOT TERMINAL
+Access Granted.
+System Ready...
+
+Type "help" for commands.
+
+</div>
 
 <input id="command" placeholder="type command here..." autofocus>
 
@@ -56,35 +63,8 @@ margin-top:auto;
 
 <script>
 
-const output = document.getElementById("output");
 const input = document.getElementById("command");
-
-function bootSequence(){
-
-let lines = [
-"FROST BOT TERMINAL",
-"Initializing FrostBot AI...",
-"Loading security modules...",
-"Connecting to network...",
-"Access Granted.",
-"",
-'Type "help" for commands.'
-];
-
-let i = 0;
-
-function typeLine(){
-if(i < lines.length){
-output.innerHTML += lines[i] + "\n";
-i++;
-setTimeout(typeLine,400);
-}
-}
-
-typeLine();
-}
-
-bootSequence();
+const output = document.getElementById("output");
 
 input.addEventListener("keydown", function(e){
 
@@ -95,19 +75,34 @@ let cmd = input.value.trim().toLowerCase();
 output.innerHTML += "\n> " + cmd + "\n";
 
 if(cmd === "help"){
-output.innerHTML += "Commands: help, scan, status, ai, sysinfo, clear, login\n";
+output.innerHTML +=
+"Commands:\n"+
+"help\n"+
+"scan\n"+
+"status\n"+
+"ai\n"+
+"sysinfo\n"+
+"clear\n"+
+"login\n";
 }
 
 else if(cmd === "scan"){
-output.innerHTML += "Scanning system...\n████████████████ 100%\nNo threats detected.\n";
+output.innerHTML +=
+"Scanning system...\n"+
+"████████████████ 100%\n"+
+"No threats detected.\n";
 }
 
 else if(cmd === "status"){
-output.innerHTML += "System Status: ONLINE\nFrostBot Core: ACTIVE\nSecurity Layer: ENABLED\n";
+output.innerHTML +=
+"System Status: ONLINE\n"+
+"FrostBot Core: ACTIVE\n"+
+"Security Layer: ENABLED\n";
 }
 
 else if(cmd === "ai"){
-output.innerHTML += "FrostBot AI: Hello. How can I assist you today?\n";
+output.innerHTML +=
+"FrostBot AI: Hello. How can I assist you today?\n";
 }
 
 else if(cmd === "sysinfo"){
@@ -119,7 +114,9 @@ output.innerHTML +=
 }
 
 else if(cmd === "login"){
-output.innerHTML += "Returning to login screen...\n";
+output.innerHTML +=
+"Returning to login screen...\n";
+
 setTimeout(function(){
 window.location.href="index.html";
 },1000);

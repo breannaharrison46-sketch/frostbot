@@ -4,6 +4,7 @@
 <title>Frost Bot Terminal</title>
 
 <style>
+
 body{
 background:black;
 color:#00ff99;
@@ -16,6 +17,7 @@ border:1px solid #00ff99;
 padding:20px;
 border-radius:10px;
 min-height:80vh;
+box-shadow:0 0 10px #00ff99;
 }
 
 #output{
@@ -32,6 +34,20 @@ font-family:monospace;
 font-size:16px;
 width:100%;
 }
+
+.cursor{
+display:inline-block;
+width:10px;
+background:#00ff99;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%{opacity:1;}
+50%{opacity:0;}
+100%{opacity:1;}
+}
+
 </style>
 
 </head>
@@ -67,15 +83,22 @@ let cmd = input.value.trim().toLowerCase();
 output.innerHTML += "\n> " + cmd;
 
 if(cmd === "help"){
-output.innerHTML += "\nCommands: help, scan, status, clear\n";
+output.innerHTML += "\nCommands:\nhelp\nscan\nstatus\nclear\nlogin\n";
 }
 
 else if(cmd === "scan"){
-output.innerHTML += "\nScanning system...\nNo threats detected.\n";
+output.innerHTML += "\nScanning system...\n████████████████ 100%\nNo threats detected.\n";
 }
 
 else if(cmd === "status"){
-output.innerHTML += "\nSystem status: ONLINE\n";
+output.innerHTML += "\nSystem Status: ONLINE\nFrostBot AI Core: ACTIVE\nNetwork: SECURE\n";
+}
+
+else if(cmd === "login"){
+output.innerHTML += "\nRedirecting to login...\n";
+setTimeout(function(){
+window.location.href = "index.html";
+},1500);
 }
 
 else if(cmd === "clear"){

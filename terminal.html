@@ -10,7 +10,8 @@ background:black;
 color:#00ff99;
 font-family:monospace;
 padding:20px;
-  
+}
+
 .terminal{
 border:1px solid #00ff99;
 padding:20px;
@@ -47,14 +48,7 @@ margin-top:auto;
 
 <div class="terminal">
 
-<div id="output">
-FROST BOT TERMINAL
-Access Granted.
-System Ready...
-
-Type "help" for commands.
-
-</div>
+<div id="output"></div>
 
 <input id="command" placeholder="type command here..." autofocus>
 
@@ -62,8 +56,35 @@ Type "help" for commands.
 
 <script>
 
-const input = document.getElementById("command");
 const output = document.getElementById("output");
+const input = document.getElementById("command");
+
+function bootSequence(){
+
+let lines = [
+"FROST BOT TERMINAL",
+"Initializing FrostBot AI...",
+"Loading security modules...",
+"Connecting to network...",
+"Access Granted.",
+"",
+'Type "help" for commands.'
+];
+
+let i = 0;
+
+function typeLine(){
+if(i < lines.length){
+output.innerHTML += lines[i] + "\n";
+i++;
+setTimeout(typeLine,400);
+}
+}
+
+typeLine();
+}
+
+bootSequence();
 
 input.addEventListener("keydown", function(e){
 
@@ -71,22 +92,34 @@ if(e.key === "Enter"){
 
 let cmd = input.value.trim().toLowerCase();
 
-output.innerHTML += "\n> " + cmd;
+output.innerHTML += "\n> " + cmd + "\n";
 
 if(cmd === "help"){
-output.innerHTML += "\nCommands: help, scan, status, clear, login\n";
+output.innerHTML += "Commands: help, scan, status, ai, sysinfo, clear, login\n";
 }
 
 else if(cmd === "scan"){
-output.innerHTML += "\nScanning system...\n████████████████ 100%\nNo threats detected.\n";
+output.innerHTML += "Scanning system...\n████████████████ 100%\nNo threats detected.\n";
 }
 
 else if(cmd === "status"){
-output.innerHTML += "\nSystem Status: ONLINE\nFrostBot Core: ACTIVE\n";
+output.innerHTML += "System Status: ONLINE\nFrostBot Core: ACTIVE\nSecurity Layer: ENABLED\n";
+}
+
+else if(cmd === "ai"){
+output.innerHTML += "FrostBot AI: Hello. How can I assist you today?\n";
+}
+
+else if(cmd === "sysinfo"){
+output.innerHTML +=
+"System: FrostBot v1.0\n"+
+"Network: Secure\n"+
+"User Access: Authorized\n"+
+"AI Core: Running\n";
 }
 
 else if(cmd === "login"){
-output.innerHTML += "\nReturning to login...\n";
+output.innerHTML += "Returning to login screen...\n";
 setTimeout(function(){
 window.location.href="index.html";
 },1000);
@@ -97,11 +130,10 @@ output.innerHTML="";
 }
 
 else{
-output.innerHTML += "\nUnknown command\n";
+output.innerHTML += "Unknown command\n";
 }
 
 input.value="";
-
 }
 
 });
